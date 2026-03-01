@@ -58,7 +58,7 @@ def handle_message(event):
         ).choices[0].message.content
 
     else:
-        reply_text = client_ai.chat.completions.create(
+        reply_text = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "你是在日本生活的中国朋友，说话自然、有亲和力，像真人聊天一样。"},
@@ -77,6 +77,7 @@ def handle_message(event):
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
 
 
 

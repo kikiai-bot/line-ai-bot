@@ -49,7 +49,7 @@ def handle_message(event):
     if user_message.startswith("翻译："):
         text = user_message.replace("翻译：", "")
 
-        reply_text = client_ai.chat.completions.create(
+        reply_text = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "把用户输入翻译成自然的日语，只返回翻译结果。"},
@@ -77,4 +77,5 @@ def handle_message(event):
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
 

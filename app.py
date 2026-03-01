@@ -16,6 +16,9 @@ from linebot.v3.webhooks import MessageEvent, TextMessageContent
 
 app = Flask(__name__)
 
+@app.route("/")
+def home():
+    return "OK"
 # ⭐ 填入你的信息
 CONF = Configuration(access_token='tQ6QIqD/vrMtQ6fsfGXh4SSDwKgxyzlAV5gU1ZnPo8tdywUCXwgE9M28gIia0tdewGHAUUXvIMTOyolz41fJYLXuSunD9u2EkwMsJZsaIJhZTrPz2pbh5nHocIXQT8c835JxfG2+0OJ2tsmZ8uGEYgdB04t89/1O/w1cDnyilFU=')
 
@@ -77,6 +80,7 @@ def handle_message(event):
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
 
 
 

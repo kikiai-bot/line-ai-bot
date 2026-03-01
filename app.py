@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, abort
 from datetime import datetime
 from openai import OpenAI
@@ -72,4 +73,5 @@ def handle_message(event):
     )
 )
 if __name__ == "__main__":
+
     app.run(port=5000)

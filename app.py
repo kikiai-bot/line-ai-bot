@@ -25,7 +25,7 @@ messaging_api = MessagingApi(api_client)
 handler = WebhookHandler("8866330bc54690de80d9cf3d64e3012b")
 
 # ⭐ 填入你的 OpenAI Key
-OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 
 @app.route("/callback", methods=['POST'])
@@ -77,5 +77,6 @@ def handle_message(event):
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
 
 

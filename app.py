@@ -54,8 +54,9 @@ def handle_message(event):
 
         reply_text = client.chat.completions.create(
             model="gpt-4o-mini",
+            max_tokens=60,
             messages=[
-                {"role": "system", "content": "把用户输入翻译成自然的日语，只返回翻译结果。"},
+                {"role": "system", "content": "翻译成自然日语。"},
                 {"role": "user", "content": text}
             ]
         ).choices[0].message.content
@@ -64,7 +65,7 @@ def handle_message(event):
         reply_text = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "你是在日本生活的中国朋友，说话自然、有亲和力，像真人聊天一样。"},
+                {"role": "system", "content": "像朋友一样自然聊天。"},
                 {"role": "user", "content": user_message}
             ]
         ).choices[0].message.content
@@ -80,6 +81,7 @@ def handle_message(event):
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
 
 
 

@@ -52,23 +52,34 @@ def handle_message(event):
     if user_message.startswith("翻译："):
         text = user_message.replace("翻译：", "")
 
-        reply_text = client.chat.completions.create(
-            model="gpt-4o-mini",
-            max_tokens=60,
-            messages=[
-                {"role": "system", "content": "翻译成自然日语。"},
-                {"role": "user", "content": text}
-            ]
-        ).choices[0].message.content
+        try:
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        max_tokens=60,
+        messages=[
+            {"role": "system", "content": "翻译成自然日语。"},
+            {"role": "user", "content": text}
+        ]
+    )
+    reply_text = response.choices[0].message.content
+except Exception as e:
+    print("OpenAI error:", e)
+    reply_text = "AI有点慢，请再发一次 🙏"
 
-    else:
-        reply_text = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "像朋友一样自然聊天。"},
-                {"role": "user", "content": user_message}
-            ]
-        ).choices[0].message.content
+   else:
+       try:
+        
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "像朋友一样自然聊天。"},
+            {"role": "user", "content": user_message}
+        ]
+    )
+    reply_text = response.choices[0].message.content
+except Exception as e:
+    print("OpenAI error:", e)
+    reply_text = "AI有点慢，请再发一次 🙏"
 
     messaging_api.reply_message(
     ReplyMessageRequest(
@@ -81,6 +92,7 @@ def handle_message(event):
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
 
 
 

@@ -47,40 +47,44 @@ def callback():
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
 
-    user_message = event.message.text
+    try:
+        user_message = event.message.text
 
-    if user_message.startswith("翻译: "):
-        text = user_message.replace("翻译: ", "")
+        # 判断模式
+        if user_message.startswith("翻译："):
+            text = user_message.replace("翻译：", "")
+            system_prompt = "翻译成自然日语。"
+        else:
+            text = user_message
+            system_prompt = "像朋友一样自然聊天。"
 
+        # 调用 OpenAI
         try:
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
-                max_tokens=60,
+                max_tokens=100,
                 messages=[
-                    {"role": "system", "content": "翻译成自然日语。"},
+                    {"role": "system", "content": system_prompt},
                     {"role": "user", "content": text}
                 ]
             )
+
             reply_text = response.choices[0].message.content
 
         except Exception as e:
             print("OpenAI error:", e)
             reply_text = "AI有点慢，请再发一次 🙏"
 
-    else:
-        try:
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "system", "content": "像朋友一样自然聊天。"},
-                    {"role": "user", "content": user_message}
-                ]
+        # 发送 LINE 回复
+        messaging_api.reply_message(
+            ReplyMessageRequest(
+                reply_token=event.reply_token,
+                messages=[TextMessage(text=reply_text)]
             )
-            reply_text = response.choices[0].message.content
+        )
 
-        except Exception as e:
-            print("OpenAI error:", e)
-            reply_text = "AI有点慢，请再发一次 🙏"
+    except Exception as e:
+        print("整体错误:", e)
 
     messaging_api.reply_message(
         ReplyMessageRequest(
@@ -93,6 +97,7 @@ def handle_message(event):
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
 
 
 

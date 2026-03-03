@@ -75,17 +75,11 @@ def handle_message(event):
             print("OpenAI error:", e)
             reply_text = "AI有点慢，请再发一次 🙏"
 
-        # 发送 LINE 回复
-        messaging_api.reply_message(
-            ReplyMessageRequest(
-                reply_token=event.reply_token,
-                messages=[TextMessage(text=reply_text)]
-            )
-        )
-
     except Exception as e:
         print("整体错误:", e)
+        reply_text = "系统错误，请稍后再试"
 
+    # ⭐ 只 reply 一次
     messaging_api.reply_message(
         ReplyMessageRequest(
             reply_token=event.reply_token,
@@ -97,6 +91,7 @@ def handle_message(event):
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
 
 
 

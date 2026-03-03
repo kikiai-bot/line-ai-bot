@@ -52,7 +52,7 @@ def handle_message(event):
 
         # 判断模式
         if user_message.startswith("翻译："):
-            text = user_message.replace("翻译：", "")
+    text = user_message.replace("翻译：", "", 1)
             system_prompt = "翻译成自然日语。"
         else:
             text = user_message
@@ -91,6 +91,7 @@ def handle_message(event):
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
 
 
 

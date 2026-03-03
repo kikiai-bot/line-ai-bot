@@ -43,22 +43,21 @@ def callback():
 
     return 'OK'
 
-
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
+
+    reply_text = None   # ⭐ 先定义
 
     try:
         user_message = event.message.text
 
-        # 判断模式
-        if user_message.startswith("翻译："):
-    text = user_message.replace("翻译：", "", 1)
-            system_prompt = "翻译成自然日语。"
-        else:
-            text = user_message
-            system_prompt = "像朋友一样自然聊天。"
+if user_message.startswith(("翻译：", "翻译:")):
+    text = user_message.replace("翻译：", "", 1).replace("翻译:", "", 1).strip()
+    system_prompt = "翻译成自然日语。"
+else:
+    text = user_message
+    system_prompt = "像朋友一样自然聊天。"
 
-        # 调用 OpenAI
         try:
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
@@ -79,7 +78,10 @@ def handle_message(event):
         print("整体错误:", e)
         reply_text = "系统错误，请稍后再试"
 
-    # ⭐ 只 reply 一次
+    # ⭐ 终极保险
+    if not reply_text:
+        reply_text = "系统异常，请稍后再试"
+
     messaging_api.reply_message(
         ReplyMessageRequest(
             reply_token=event.reply_token,
@@ -88,9 +90,12 @@ def handle_message(event):
     )
 
 
+
+
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
 
 
 

@@ -46,18 +46,20 @@ def callback():
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
 
-    reply_text = None   # ⭐ 先定义
+    reply_text = None
 
     try:
         user_message = event.message.text
 
-if user_message.startswith(("翻译：", "翻译:")):
-    text = user_message.replace("翻译：", "", 1).replace("翻译:", "", 1).strip()
-    system_prompt = "翻译成自然日语。"
-else:
-    text = user_message
-    system_prompt = "像朋友一样自然聊天。"
+        # ⭐ 正确缩排
+        if user_message.startswith(("翻译：", "翻译:")):
+            text = user_message.replace("翻译：", "", 1).replace("翻译:", "", 1).strip()
+            system_prompt = "翻译成自然日语。"
+        else:
+            text = user_message
+            system_prompt = "像朋友一样自然聊天。"
 
+        # ⭐ OpenAI 处理
         try:
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
@@ -67,7 +69,6 @@ else:
                     {"role": "user", "content": text}
                 ]
             )
-
             reply_text = response.choices[0].message.content
 
         except Exception as e:
@@ -95,6 +96,7 @@ else:
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
 
 
 
